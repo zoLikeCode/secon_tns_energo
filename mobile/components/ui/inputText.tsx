@@ -28,9 +28,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 42,
     width: '100%',
-    alignContent: 'center',
+    justifyContent: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 12,
   },
+
   textInput: {
     fontFamily: fonts.regular,
     fontSize: fontSize.f16,

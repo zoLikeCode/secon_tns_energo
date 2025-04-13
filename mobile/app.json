@@ -1,24 +1,28 @@
 {
   "expo": {
-    "name": "seconhack",
-    "slug": "seconhack",
+    "name": "ТНС Энерго",
+    "slug": "tnsenergo",
+    "description": "Приложение для ТНС Энерго от MISIS GO",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/tns-czvet.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "backgroundColor": "#F0F0F0",
     "ios": {
       "supportsTablet": true
     },
     "platforms": ["ios", "android"],
     "android": {
+      "permissions": ["INTERNET"],
       "networkSecurityConfig": "./network_security_config.xml",
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/unnamed.png",
         "backgroundColor": "#F0F0F0"
-      }
+      },
+      "package": "go.itatmisis.ru"
     },
     "web": {
       "bundler": "metro",
@@ -35,10 +39,27 @@
           "resizeMode": "contain",
           "backgroundColor": "#F0F0F0"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "networkSecurityConfig": "./network_security_config.xml"
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "781c5a24-2294-4ab4-8e76-18400bdf7e81"
+      }
+    },
+    "owner": "spioncino"
   }
 }

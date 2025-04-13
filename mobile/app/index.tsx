@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
 import { colors, fonts, fontSize, radius } from '@/components/tokens';
-import { router } from 'expo-router';
+import { router, SplashScreen } from 'expo-router';
 import { Button } from '@/components/ui/button';
 import { InputText } from '@/components/ui/inputText';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,7 +16,7 @@ export default function Index() {
 
   const Login = () => {
     axios
-      .post('http://185.112.83.245:8000/server/tasks/', {
+      .post('https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/tasks/', {
         sur_name: loginText,
         key: passText,
       })
@@ -46,7 +46,7 @@ export default function Index() {
           <InputText text={passText} input={setPassText} placeholder={'Пароль...'} />
         </View>
       </View>
-      <Button text={'Войти'} active={true} onPress={() => Login()} />
+      <Button text={'Войти   '} active={true} onPress={() => Login()} />
     </SafeAreaView>
   );
 }

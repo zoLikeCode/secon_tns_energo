@@ -57,7 +57,7 @@ export default function ActList() {
     }
 
     axios
-      .post('http://185.112.83.245:8000/server/tasks/', {
+      .post('https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/tasks/', {
         sur_name: sur_name,
         key: key_join,
       })
@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: fontSize.f16,
     textAlignVertical: 'top',
+    justifyContent: 'center',
   },
   searchIcon: {
     position: 'absolute',

@@ -1,7 +1,7 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library'; // для работы с медиатекой
 import { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ToastAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { colors, fonts, fontSize, radius } from '@/components/tokens';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -26,6 +26,8 @@ export default function Camera() {
   const router = useRouter();
 
   const { id } = useAct();
+
+  const [qualityPhoto, setQualityPhoto] = useState<Boolean>(false);
 
   if (!cameraPermission || !mediaPermission) {
     return <View />;
@@ -99,12 +101,37 @@ export default function Camera() {
     formData.append('number', nowPhoto);
 
     try {
-      const response = await axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-    } catch (e) {}
+      let isMeter;
+      const respone = await axios
+        .post('https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/check_photo/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((m) => {
+          const answer = String(m.data.ml_answer).trim().toLowerCase();
+          isMeter = answer === 'meter';
+          setQualityPhoto(isMeter);
+          console.log(m.data.ml_answer, qualityPhoto);
+        })
+        .catch((e) => console.log(e));
+
+      if (isMeter || nowPhoto === 3) {
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      } else {
+        ToastAndroid.show(
+          'Ваше изображение является плохим. Пожалуйста, сфоткайте ещё раз.',
+          ToastAndroid.LONG,
+        );
+        setPhoto(nowPhoto, null);
+      }
+    } catch (e) {
+      () => console.log(e);
+    }
   };
 
   const takePicture = async () => {

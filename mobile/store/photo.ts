@@ -8,9 +8,11 @@ type usePhotoProps = {
   setNowPhoto: (value: number) => void;
   setPhoto: (index: 1 | 2 | 3, value: string) => void;
   resetPhoto: (index: 1 | 2 | 3) => void;
+  countPhotos: () => number;
+  count_photo: number; // Добавляем сюда count_photo
 };
 
-export const usePhoto = create<usePhotoProps>((set) => ({
+export const usePhoto = create<usePhotoProps>((set, get) => ({
   nowPhoto: 1,
 
   photoOne: null,
@@ -31,6 +33,7 @@ export const usePhoto = create<usePhotoProps>((set) => ({
         set({ photoThree: value });
         break;
     }
+    set({ count_photo: get().countPhotos() });
   },
 
   resetPhoto: (index) => {
@@ -45,5 +48,16 @@ export const usePhoto = create<usePhotoProps>((set) => ({
         set({ photoThree: null });
         break;
     }
+    set({ count_photo: get().countPhotos() });
   },
+
+  countPhotos: () => {
+    let count = 0;
+    if (get().photoOne) count++;
+    if (get().photoTwo) count++;
+    if (get().photoThree) count++;
+    return count;
+  },
+
+  count_photo: 0,
 }));

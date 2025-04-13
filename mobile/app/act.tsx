@@ -20,6 +20,7 @@ import * as Location from 'expo-location';
 import { PhotoBlock } from '@/components/photoBlock';
 import axios from 'axios';
 import { useAct } from '@/store/act';
+import { usePhoto } from '@/store/photo';
 
 export default function Act({}: ActProps) {
   const [type, setType] = useState('');
@@ -30,6 +31,8 @@ export default function Act({}: ActProps) {
 
   const [coords, setCoords] = useState<{ latitude: number; longitude: number } | null>(null);
   const [hasGeoPermission, setHasGeoPermission] = useState<boolean | null>(null);
+
+  const { countPhotos, count_photo } = usePhoto();
 
   const requestGeoPermission = async () => {
     const { status: statusGEO } = await Location.requestForegroundPermissionsAsync();
@@ -56,7 +59,7 @@ export default function Act({}: ActProps) {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://185.112.83.245:8000/server/task/${id}/`).then((m) => {
+    axios.get(`https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/task/${id}/`).then((m) => {
       setData(m.data);
       setIsLoad(true);
       setType(m.data.type_of_work === 'контроль' ? 'control' : 'act');
@@ -122,6 +125,11 @@ export default function Act({}: ActProps) {
   //наличие пломб
   const [seal, setSeal] = useState('');
 
+  const updateCountPhoto = () => {
+    const count = usePhoto.getState().countPhotos(); // Получаем количество загруженных фото
+    usePhoto.setState({ count_photo: count }); // Обновляем count_photo
+  };
+
   const sendAct = () => {
     if (!coords) {
       ToastAndroid.showWithGravity(
@@ -132,9 +140,11 @@ export default function Act({}: ActProps) {
       return;
     }
 
+    updateCountPhoto();
+
     axios
       .post(
-        'http://185.112.83.245:8000/server/act_ed/',
+        'https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/act_ed/',
         {
           task_id: id,
           personal_number: numberBill || '',
@@ -155,6 +165,7 @@ export default function Act({}: ActProps) {
           client: name?.trim() || '',
           latitude: String(coords.latitude),
           logitude: String(coords.longitude),
+          count_photo: count_photo,
         },
         {
           headers: {
@@ -180,9 +191,11 @@ export default function Act({}: ActProps) {
       return;
     }
 
+    updateCountPhoto();
+
     axios
       .post(
-        'http://185.112.83.245:8000/server/act_control/',
+        'https://beed-2a12-5940-db1b-00-2.ngrok-free.app/server/act_control/',
         {
           task_id: id,
           warn: haveViolationRest ? 'выявлено' : noHaveViolationRest ? 'не выявлено' : '',
@@ -202,6 +215,7 @@ export default function Act({}: ActProps) {
           why: descPeopleIllegalConnect || '',
           latitude: String(coords.latitude),
           logitude: String(coords.longitude),
+          count_photo: count_photo,
         },
         {
           headers: {
