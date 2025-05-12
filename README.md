@@ -1,4 +1,4 @@
-# ⚡ MISIS GO
+![Alt text](hello.jpg)
 
 ## 👥 Команда
 
